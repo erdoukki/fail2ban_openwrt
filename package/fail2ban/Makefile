@@ -18,21 +18,22 @@ PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=LICENSE.txt
 PKG_MAINTAINER:=Gerald Kerma <gandalf@gk2.net>
 
-HOST_BUILD_DEPENDS:=python3/host
+PKG_INSTALL:=0
 
-#include $(TOPDIR)/feeds/packages/lang/python/pypi.mk
+HOST_BUILD_DEPENDS:=python3/host python3-setuptools/host
+
 include $(INCLUDE_DIR)/package.mk
-include $(TOPDIR)/feeds/packages/lang/python/python3-package.mk
+$(call include_mk, python3-package.mk)
 
 define Package/fail2ban
 	SECTION:=net
 	CATEGORY:=Network
-	TITLE:=Fail2Ban: ban hosts that cause multiple authentication errors
+	TITLE:=ban hosts that cause multiple authentication errors
 	URL:=https://www.fail2ban.org/
 	DEPENDS:= \
 		+libinotifytools	\
-#		+pyinotify		\
-		+python3		\
+		+python3-pyinotify	\
+		+python3-light		\
 		+python3-dns		\
 		+python3-ctypes		\
 		+python3-distutils	\
@@ -58,16 +59,42 @@ define Build/Prepare
 	cd $(PKG_BUILD_DIR) && ./fail2ban-2to3
 endef
 
-define Package/fail2ban/install
+define Build/Compile
+	$(call Build/Compile/Py3Mod,,install --prefix=/usr --root=$(PKG_INSTALL_DIR))
+endef
+
+define Build/Install
+	true
+endef
+
+define Py3Package/fail2ban/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/etc/init.d
+	$(CP) $(PKG_BUILD_DIR)/usr/bin/* $(1)/usr/bin/
+
 	$(INSTALL_DIR) $(1)/etc/fail2ban/action.d
-	$(INSTALL_DIR) $(1)/etc/fail2ban/fail2ban.d
-	$(CP) ./files/etc/init.d/fail2ban.init $(1)/etc/init.d/fail2ban
 	$(CP) ./files/etc/fail2ban/action.d/* $(1)/etc/fail2ban/action.d/
+
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(CP) ./files/etc/init.d/fail2ban.init $(1)/etc/init.d/fail2ban
+
+	$(INSTALL_DIR) $(1)/etc/fail2ban/fail2ban.d
 	$(CP) ./files/etc/fail2ban/fail2ban.d/uci.conf $(1)/etc/fail2ban/fail2ban.d/uci.conf
+
 	$(INSTALL_CONF) ./files/etc/config/fail2ban $(1)/etc/config/fail2ban
+endef
+
+define Package/fail2ban/postinst
+#!/bin/sh
+[ -n "$$IPKG_INSTROOT" ] || {
+        /etc/init.d/fail2ban enable
+        /etc/init.d/fail2ban restart 2>/dev/null
+}
+endef
+
+define Package/fail2ban/prerm
+#!/bin/sh
+        /etc/init.d/fail2ban disable
+        /etc/init.d/fail2ban stop
 endef
 
 $(eval $(call Py3Package,fail2ban))
