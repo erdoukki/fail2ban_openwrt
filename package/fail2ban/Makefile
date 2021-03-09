@@ -61,7 +61,7 @@ define Py3Package/fail2ban/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/etc/fail2ban/
-	$(CP) $(PKG_INSTALL_DIR)/config/* $(1)/etc/fail2ban/
+	$(CP) $(PKG_BUILD_DIR)/config/* $(1)/etc/fail2ban/
 	$(CP) ./files/etc/fail2ban/* $(1)/etc/fail2ban/
 
 	$(INSTALL_DIR) $(1)/etc/init.d
