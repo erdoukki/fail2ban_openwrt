@@ -13,8 +13,6 @@ PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_SOURCE_URL:=https://github.com/fail2ban/fail2ban
 PKG_MIRROR_HASH:=1899888a178e2a7d8b7234afcd96387559a7781fb4aa621c9288258e74753f47
-#PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-#PKG_BUILD_DEPENDS:=python3
 
 PKG_INSTALL:=1
 HOST_BUILD_DEPENDS:=python3/host
@@ -22,9 +20,6 @@ HOST_BUILD_DEPENDS:=python3/host
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=LICENSE.txt
 PKG_MAINTAINER:=Gerald Kerma <gandalf@gk2.net>
-
-#PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
-#HOST_UNPACK=$(HOST_TAR) -C $(HOST_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
 
 include $(TOPDIR)/feeds/packages/lang/python/pypi.mk
 include $(INCLUDE_DIR)/package.mk
@@ -46,7 +41,6 @@ define Package/fail2ban
 		+python3-sqlite3	\
 		+python3-urllib		\
 		+python3-lib2to3
-#	PKGARCH:=all
 endef
 
 define Package/fail2ban/description
@@ -58,10 +52,6 @@ define Package/fail2ban/conffiles
 /etc/config/fail2ban
 endef
 
-#define Build/Compile
-#	$(call Build/Compile/Py3Mod,,install --prefix=/usr --root="$(PKG_INSTALL_DIR)")
-#endef
-
 define Build/InstallDev
 	$(call HostPython3/Run,,$(HOST_PYTHON3_PIP_INSTALL_HOST) pyinotify)
 endef
@@ -72,7 +62,6 @@ define Build/Prepare
 endef
 
 define Package/fail2ban/install
-#define Py3Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 
@@ -85,14 +74,5 @@ define Package/fail2ban/install
 	$(INSTALL_CONF) ./files/etc/config/fail2ban $(1)/etc/config/fail2ban
 endef
 
-#define Host/Compile
-#	$(call HostPython3/ModSetup,,install --prefix="/usr" --root="$(STAGING_DIR_HOSTPKG)")
-#endef
-
-#Host/Install:=
-
-#$(eval $(call HostBuild))
-
 $(eval $(call Py3Package,fail2ban))
 $(eval $(call BuildPackage,fail2ban))
-#$(eval $(call BuildPackage,fail2ban-src))
