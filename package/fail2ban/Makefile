@@ -14,16 +14,12 @@ PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_SOURCE_URL:=https://github.com/fail2ban/fail2ban
 PKG_MIRROR_HASH:=1899888a178e2a7d8b7234afcd96387559a7781fb4aa621c9288258e74753f47
 
+PKG_MAINTAINER:=Gerald Kerma <gandalf@gk2.net>
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=LICENSE.txt
-PKG_MAINTAINER:=Gerald Kerma <gandalf@gk2.net>
-
-PKG_INSTALL:=0
-
-HOST_BUILD_DEPENDS:=python3/host python3-setuptools/host
 
 include $(INCLUDE_DIR)/package.mk
-$(call include_mk, python3-package.mk)
+include $(TOPDIR)/feeds/packages/lang/python/python3-package.mk
 
 define Package/fail2ban
 	SECTION:=net
@@ -43,6 +39,7 @@ define Package/fail2ban
 		+python3-urllib		\
 		+python3-lib2to3	\
 		+python3-setuptools
+	VARIANT:=python3
 endef
 
 define Package/fail2ban/description
@@ -54,22 +51,9 @@ define Package/fail2ban/conffiles
 /etc/config/fail2ban
 endef
 
-define Build/Prepare
-	$(call Build/Prepare/Default)
-	cd $(PKG_BUILD_DIR) && ./fail2ban-2to3
-endef
-
-define Build/Compile
-	$(call Build/Compile/Py3Mod,,install --prefix=/usr --root=$(PKG_INSTALL_DIR))
-endef
-
-define Build/Install
-	true
-endef
-
 define Py3Package/fail2ban/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/usr/bin/* $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 
 	$(INSTALL_DIR) $(1)/etc/fail2ban/action.d
 	$(CP) ./files/etc/fail2ban/action.d/* $(1)/etc/fail2ban/action.d/
@@ -93,9 +77,12 @@ endef
 
 define Package/fail2ban/prerm
 #!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || {
         /etc/init.d/fail2ban disable
         /etc/init.d/fail2ban stop
+}
 endef
 
 $(eval $(call Py3Package,fail2ban))
 $(eval $(call BuildPackage,fail2ban))
+$(eval $(call BuildPackage,fail2ban-src))
