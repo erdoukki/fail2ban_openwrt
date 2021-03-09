@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fail2ban
 PKG_VERSION:=0.11.2
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
@@ -60,8 +60,9 @@ define Py3Package/fail2ban/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 
-	$(INSTALL_DIR) $(1)/etc/fail2ban/action.d
-	$(CP) ./files/etc/fail2ban/action.d/* $(1)/etc/fail2ban/action.d/
+	$(INSTALL_DIR) $(1)/etc/fail2ban/
+	$(CP) $(PKG_INSTALL_DIR)/config/* $(1)/etc/fail2ban/
+	$(CP) ./files/etc/fail2ban/* $(1)/etc/fail2ban/
 
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) ./files/etc/init.d/fail2ban.init $(1)/etc/init.d/fail2ban
