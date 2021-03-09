@@ -37,6 +37,7 @@ define Package/fail2ban
 	URL:=https://www.fail2ban.org/
 	DEPENDS:= \
 		+libinotifytools	\
+		+python3		\
 		+python3-dns		\
 		+python3-ctypes		\
 		+python3-distutils	\
@@ -45,7 +46,6 @@ define Package/fail2ban
 		+python3-sqlite3	\
 		+python3-urllib		\
 		+python3-lib2to3
-	VARIANT:=python3
 #	PKGARCH:=all
 endef
 
