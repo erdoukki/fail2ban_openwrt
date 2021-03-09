@@ -18,6 +18,9 @@ PKG_MAINTAINER:=Gerald Kerma <gandalf@gk2.net>
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=LICENSE.txt
 
+PKG_INSTALL:=0
+HOST_BUILD_DEPENDS:=python3/host python3-setuptools/host
+
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/python/python3-package.mk
 
