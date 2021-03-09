@@ -50,6 +50,11 @@ define Package/fail2ban/conffiles
 /etc/config/fail2ban
 endef
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	cd $(PKG_BUILD_DIR) && ./fail2ban-2to3
+endef
+
 define Py3Package/fail2ban/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
@@ -71,6 +76,8 @@ endef
 define Package/fail2ban/postinst
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] || {
+	rm /usr/bin/fail2ban-python
+	ln -s /usr/bin/python3 /usr/bin/fail2ban-python
         /etc/init.d/fail2ban enable
         /etc/init.d/fail2ban restart 2>/dev/null
 }
