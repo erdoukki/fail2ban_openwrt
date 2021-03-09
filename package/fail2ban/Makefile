@@ -63,6 +63,7 @@ define Py3Package/fail2ban/install
 	$(INSTALL_DIR) $(1)/etc/fail2ban/fail2ban.d
 	$(CP) ./files/etc/fail2ban/fail2ban.d/uci.conf $(1)/etc/fail2ban/fail2ban.d/uci.conf
 
+	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./files/etc/config/fail2ban $(1)/etc/config/fail2ban
 endef
 
