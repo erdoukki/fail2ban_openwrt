@@ -8,6 +8,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=fail2ban
 PKG_VERSION:=0.11.2
 PKG_RELEASE:=4
+PKG_ARCH:=ALL
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
@@ -60,8 +61,6 @@ define Py3Package/fail2ban/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fail2ban-server $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fail2ban-client $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fail2ban-regex $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fail2ban-testcases $(1)/usr/bin/
-#	$(CP) $(PKG_INSTALL_DIR)/usr/lib/fail2ban-python $(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/etc/fail2ban/
 	$(CP) $(PKG_BUILD_DIR)/config/* $(1)/etc/fail2ban/
@@ -80,7 +79,6 @@ endef
 define Package/fail2ban/postinst
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] || {
-#	rm /usr/bin/fail2ban-python
 	ln -s /usr/bin/python3 /usr/bin/fail2ban-python
         /etc/init.d/fail2ban enable
         /etc/init.d/fail2ban restart 2>/dev/null
