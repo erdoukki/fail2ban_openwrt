@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fail2ban
 PKG_VERSION:=0.11.2
-PKG_RELEASE:=4
+PKG_RELEASE:=1
 PKGARCH:=ALL
 
 PKG_SOURCE_PROTO:=git

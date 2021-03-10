@@ -5,11 +5,12 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=python3-pyinotify
+PKG_NAME:=pyinotify
 PKG_VERSION:=0.9.6
 PKG_RELEASE:=1
 
-PYPI_NAME:=pyinotify
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/source/p/pyinotify/
 PKG_HASH:=skip
 
 PKG_LICENSE:=MIT
