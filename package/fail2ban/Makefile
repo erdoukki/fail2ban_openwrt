@@ -19,6 +19,9 @@ PKG_MAINTAINER:=Gerald Kerma <gandalf@gk2.net>
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=LICENSE.txt
 
+PKG_BUILD_DEPENDS:=python python-setuptools
+
+include $(TOPDIR)/feeds/packages/lang/python/pypi.mk
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/python/python3-package.mk
 
@@ -91,6 +94,12 @@ define Package/fail2ban/prerm
         /etc/init.d/fail2ban disable
         /etc/init.d/fail2ban stop
 }
+endef
+
+define Py3Build/Compile
+	$(call Build/Compile/Py3Mod,,\
+		install --prefix=/usr --root="$(PKG_INSTALL_DIR)" \
+	)
 endef
 
 $(eval $(call Py3Package,fail2ban))
