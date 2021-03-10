@@ -5,7 +5,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=python-pyinotify
+PKG_NAME:=python3-pyinotify
 PKG_VERSION:=0.9.6
 PKG_RELEASE:=1
 
