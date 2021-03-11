@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=fail2ban
 PKG_VERSION:=0.11.2
 PKG_RELEASE:=1
-#PKGARCH:=ALL
+PKGARCH:=ALL
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
@@ -97,6 +97,7 @@ define Package/fail2ban/prerm
 [ -n "$${IPKG_INSTROOT}" ] || {
         /etc/init.d/fail2ban disable
         /etc/init.d/fail2ban stop
+	rm /usr/bin/fail2ban-python
 }
 endef
 
