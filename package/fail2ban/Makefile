@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=fail2ban
 PKG_VERSION:=0.11.2
 PKG_RELEASE:=1
-PKGARCH:=ALL
+#PKGARCH:=ALL
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=$(PKG_VERSION)
@@ -19,11 +19,14 @@ PKG_MAINTAINER:=Gerald Kerma <gandalf@gk2.net>
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=LICENSE.txt
 
-PKG_BUILD_DEPENDS:=python python-setuptools
+#PKG_BUILD_DEPENDS:=python python-setuptools
 
-include $(TOPDIR)/feeds/packages/lang/python/pypi.mk
+#include $(TOPDIR)/feeds/packages/lang/python/pypi.mk
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/python/python3-package.mk
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(BUILD_VARIANT)-$(PKG_NAME)-$(PKG_VERSION)
+PKG_UNPACK:=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
 
 define Package/fail2ban
 	SECTION:=net
@@ -43,6 +46,7 @@ define Package/fail2ban
 		+python3-urllib		\
 		+python3-lib2to3	\
 		+python3-setuptools
+	VARIANT:=python3
 endef
 
 define Package/fail2ban/description
@@ -94,12 +98,6 @@ define Package/fail2ban/prerm
         /etc/init.d/fail2ban disable
         /etc/init.d/fail2ban stop
 }
-endef
-
-define Py3Build/Compile
-	$(call Build/Compile/Py3Mod,,\
-		install --prefix=/usr --root="$(PKG_INSTALL_DIR)" \
-	)
 endef
 
 $(eval $(call Py3Package,fail2ban))
